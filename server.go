@@ -1,16 +1,14 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"github.com/gin-gonic/gin"
     "./api"
 )
 
 func main() {
-	http.HandleFunc("/api/time", api.Route_Time);
+	router := gin.Default();
 
+    router.GET("/api/time", api.Route_Time)
 
-
-    fmt.Println("Listening on http://localhost:8080/")
-	http.ListenAndServe(":8080", nil)
+    router.Run();
 }

@@ -1,14 +1,13 @@
 package api;
 
 import (
-	"net/http"
+	"github.com/gin-gonic/gin"
     "time"
-    "fmt"
+	"net/http"
 )
 
-func Route_Time(w http.ResponseWriter, r *http.Request) {
-    timeText, err := time.Now().MarshalText();
-    if err != nil { panic(err) }
-
-    fmt.Fprintf(w, "{\"currentTime\":\"%s\"}", timeText)
+func Route_Time(c* gin.Context) {
+    c.JSON(http.StatusOK, gin.H{
+        "currentTime": time.Now().String(),
+    })
 };
