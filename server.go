@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/contrib/gzip"
-    "./api"
+    "github.com/wgoodall01/verify/api"
 )
 
 func main() {
