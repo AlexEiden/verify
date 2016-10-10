@@ -12,8 +12,8 @@ func main() {
     // Middleware for all requests
     router.Use(gzip.Gzip(gzip.DefaultCompression));
 
-    router.GET("/api/time", api.Route_Time)
-    router.POST("/api/sign", api.Route_Sign)
+    router.GET("/api/time", api.Route_Time())
+    //router.POST("/api/sign", api.Route_Sign())
 
     router.Run();
 }
