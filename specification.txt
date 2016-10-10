@@ -1,0 +1,11 @@
+Request:
+{
+    "documentHash":"sha-256 hex encoded hash"
+}
+
+Response:
+{
+    "timestamp":unix timestamp as int64,
+    "composite":"hex encoded composite, 40 bytes",
+    "signature":"hex encoded, PKCS1v15 signature"
+}
