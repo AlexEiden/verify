@@ -25,8 +25,9 @@ func Route_Sign(privkey *rsa.PrivateKey) (func(c* gin.Context)) {
         c.Bind(&req)
 
         documentHash, err := hex.DecodeString(req.DocumentHash)
-        if(err != nil) { c.AbortWithStatus(400) } // Bad hex encoding
-        if(len(documentHash) != 32) { c.AbortWithStatus(400) } // Hash is wrong length
+        if(err != nil) { c.AbortWithStatus(400); return } // Bad hex encoding
+        if(len(documentHash) != 32) { c.AbortWithStatus(400); return } // Hash is wrong length
+
 
         // Set up verification
         timestamp := time.Now().Unix()
