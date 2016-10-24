@@ -23,8 +23,9 @@ func main() {
     router.POST("/api/sign", api.Route_Sign(privateKey))
 
     // Serve static frontend
-    router.Use(static.ServeRoot("/", "./public"))
+    router.NoRoute(static.ServeRoot("/", "./build"))
 
+    
 
     router.Run();
 }
