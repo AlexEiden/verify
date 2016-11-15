@@ -12,6 +12,7 @@ export default class extends React.Component {
             <body>
                 <div id='root' dangerouslySetInnerHTML={{__html: this.props.body}} />
                 <script src='/app.js'/>
+                <script src='/style.js'/>
             </body>
             </html>
         )

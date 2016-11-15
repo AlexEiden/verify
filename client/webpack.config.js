@@ -6,29 +6,48 @@ var ReactStaticPlugin = require('react-static-webpack-plugin');
 module.exports = {
     devtool: "source-map",
 
-    entry: {app: ['./app/index.jsx']},
+    devServer: {
+        hot: true
+    },
+
+    entry: {
+        app: path.resolve("./app/index.jsx"),
+        style: path.resolve("./app/pages/main.scss")
+    },
 
     output:{
-        path: path.join(__dirname, 'dist'),
+        path: path.resolve('./dist'),
         filename:'[name].js',
     },
 
     plugins: [
-        //new webpack.optimize.UglifyJsPlugin({ screw_ie8: true }),
+        new webpack.optimize.UglifyJsPlugin({ screw_ie8: true }),
         new ReactStaticPlugin({
-            routes: "./app/routes.jsx",
-            template: "./app/pageTemplate.jsx"
+            routes: path.resolve("./app/routes.jsx"),
+            template: path.resolve("./app/pageTemplate.jsx")
         })
     ],
+
+    resolve: {
+        root: path.resolve("./app"),
+    },
 
     module: {
         loaders: [
             {
-                test: /.jsx?$/,
+                test: /\.scss$/,
+                loader: "style!css!sass"
+            },
+            {
+                test: /\.jsx?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: { presets: ['es2015', 'react'] }
-            }
+            },
         ]
+    },
+    
+    sassLoader: {
+        includePaths: [path.resolve("./app/scss")]
     }
 }
