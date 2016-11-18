@@ -6,8 +6,8 @@ export class PageFrame extends React.Component {
         return (
             <div>
                 <div className="container">
-                    <Link href="/"><b>Home</b></Link>
-                    <Link href="/about">About</Link>
+                    <Link to="/"><b>Home</b></Link>
+                    <Link to="/about">About</Link>
                 </div>
                 <div className="container mainPage">
                     {this.props.children}

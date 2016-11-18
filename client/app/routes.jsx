@@ -9,6 +9,6 @@ import { PageFrame } from "pages/pageFrame.jsx";
 export const routes = (
     <Route path="/" component={ PageFrame }>
         <IndexRoute component={ MainPage }/>
-        <Route path="/about" component={ AboutPage }/>
+        <Route path="about" component={ AboutPage }/>
     </Route>
 )

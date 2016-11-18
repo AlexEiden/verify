@@ -1,17 +1,29 @@
-import React from "react";
-import { render } from 'react-dom';
-import { Router, browserHistory } from 'react-router';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
+import { Router, browserHistory, RoutingContext, match } from 'react-router';
 
 // Get routes
 import { routes } from "./routes.jsx";
 
-// If it's in browser, render to root el
-if(typeof document !== 'undefined'){
-    render(
-        <Router routes={routes} history={browserHistory} />,
+
+// Client render (optional):
+if (typeof document !== 'undefined') {
+    ReactDOM.render(
+        <Router history={browserHistory} routes={routes} />, 
         document.getElementById('root')
     );
 }
 
-// Export routes so that ReactStaticPlugin can build them
-export default routes;
+// Exported static site renderer:
+export default (locals, callback) => {
+  const history = createMemoryHistory();
+  const location = history.createLocation(locals.path);
+
+  match({ routes, location }, (error, redirectLocation, renderProps) => {
+    callback(null, template({
+      html: ReactDOMServer.renderToString(<RoutingContext {...renderProps} />),
+      assets: locals.assets
+    }));
+  });
+};

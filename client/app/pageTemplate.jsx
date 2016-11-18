@@ -8,11 +8,11 @@ export default class extends React.Component {
                 <meta charSet='utf-8' />
                 <meta name='viewport' content='width=device-width, minimum-scale=1.0' />
                 <title>{this.props.title}</title>
+                <script src='/style.js'/>
             </head>
             <body>
                 <div id='root' dangerouslySetInnerHTML={{__html: this.props.body}} />
                 <script src='/app.js'/>
-                <script src='/style.js'/>
             </body>
             </html>
         )
