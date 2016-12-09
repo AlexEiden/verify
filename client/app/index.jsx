@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
-import { Router, browserHistory, RoutingContext, match } from 'react-router';
+import { Router, browserHistory, createMemoryHistory, RouterContext, match } from 'react-router';
+import htmlTemplate from "htmlTemplate.js";
+import Helmet from "react-helmet";
 
 // Get routes
 import { routes } from "./routes.jsx";
@@ -21,9 +23,8 @@ export default (locals, callback) => {
   const location = history.createLocation(locals.path);
 
   match({ routes, location }, (error, redirectLocation, renderProps) => {
-    callback(null, template({
-      html: ReactDOMServer.renderToString(<RoutingContext {...renderProps} />),
-      assets: locals.assets
-    }));
+    var pageHtml = ReactDOMServer.renderToString(<RouterContext {...renderProps} />)
+    var head = Helmet.rewind();
+    callback(null, htmlTemplate(head, pageHtml));
   });
 };

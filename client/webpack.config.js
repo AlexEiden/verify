@@ -1,7 +1,8 @@
 var webpack = require("webpack");
 var path = require("path");
-var ReactStaticPlugin = require('react-static-webpack-plugin');
-
+var StaticSitePlugin = require('static-site-generator-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
+var routeList = require("./app/routeList");
 
 module.exports = {
     devtool: "source-map",
@@ -12,20 +13,18 @@ module.exports = {
 
     entry: {
         app: path.resolve("./app/index.jsx"),
-        style: path.resolve("./app/pages/main.scss")
+        // style: path.resolve("./app/pages/main.scss")
     },
 
     output:{
         path: path.resolve('./dist'),
         filename:'[name].js',
+        libraryTarget: "umd"
     },
 
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({ screw_ie8: true }),
-        new ReactStaticPlugin({
-            routes: path.resolve("./app/routes.jsx"),
-            template: path.resolve("./app/pageTemplate.jsx")
-        })
+        new StaticSitePlugin("app", routeList),
+        new ExtractTextPlugin("style.css")
     ],
 
     resolve: {
@@ -36,13 +35,15 @@ module.exports = {
         loaders: [
             {
                 test: /\.scss$/,
-                loader: "style!css!sass"
+                loader: ExtractTextPlugin.extract('style-loader', 'css!sass?sourceMap=true')
             },
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
-                query: { presets: ['es2015', 'react'] }
+                query: {
+                    "presets": ["es2015", "react"]
+                }
             },
         ]
     },
