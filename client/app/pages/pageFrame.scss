@@ -1,0 +1,39 @@
+@import "~bulma/sass/utilities/mixins";
+@import "~bulma/sass/grid/columns";
+
+body {
+    background-color:hsl(0, 0%, 95%);
+    font-family: sans-serif;
+    color: #3c3c3c;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+.title-nav-link{ 
+    margin-right:10px;
+    text-decoration:underline;
+    color:#555;
+    font-weight:normal;
+}
+
+.title {
+    @extend .columns;
+    @extend .is-mobile;
+    margin-top:5px;
+    border-bottom:3px solid black;
+}
+
+.title-name {
+    @extend .column;
+    font-size:40px;
+    font-weight:bold;
+}
+
+.title-nav {
+    @extend .column;
+    align-self:flex-end; // Align to bottom
+    flex-grow:0;
+}

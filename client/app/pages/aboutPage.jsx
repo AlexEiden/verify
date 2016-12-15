@@ -1,10 +1,12 @@
-import React from 'react';
+import React from "react";
+import Helmet from "react-helmet";
 
 export class AboutPage extends React.Component{
     render(){
         return (
             <div>
-                <h1>This is the About page.</h1>
+                <Helmet title="About"/>
+                <h2>This is the About page.</h2>
                 <div>other things go here</div>
             </div>
         );

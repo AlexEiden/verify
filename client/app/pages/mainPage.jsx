@@ -5,7 +5,7 @@ export class MainPage extends React.Component{
     render(){
         return (
             <div>
-                <h1>This is a page!</h1>
+                <h2>This is a page!</h2>
                 <div>This is some other text</div>
             </div>
         );
