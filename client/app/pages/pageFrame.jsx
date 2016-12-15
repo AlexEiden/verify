@@ -22,7 +22,7 @@ export class PageFrame extends React.Component {
                 </div>
                 <div className="container mainPage">
                     <div className="title">
-                        <div className="title-name">Verify</div>
+                        <Link className="title-name" to="/">Verify</Link>
                         <div className="title-nav">
                             {[
                                 ["/",         "Home"],

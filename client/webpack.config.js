@@ -45,6 +45,10 @@ module.exports = {
                     "presets": ["es2015", "react"]
                 }
             },
+            {
+                test: /\.svg$/,
+                loader: "file-loader"
+            },
         ]
     },
     

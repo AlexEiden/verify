@@ -1,10 +1,11 @@
 @import "~bulma/sass/utilities/mixins";
 @import "~bulma/sass/grid/columns";
+@import "../vars";
 
 body {
-    background-color:hsl(0, 0%, 95%);
-    font-family: sans-serif;
-    color: #3c3c3c;
+    background-color:$background;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    color: $dark;
 }
 
 .container {
@@ -15,25 +16,30 @@ body {
 .title-nav-link{ 
     margin-right:10px;
     text-decoration:underline;
-    color:#555;
+    color:$med;
     font-weight:normal;
 }
 
 .title {
     @extend .columns;
     @extend .is-mobile;
-    margin-top:5px;
-    border-bottom:3px solid black;
+    border-bottom:3px solid $dark;
 }
 
 .title-name {
     @extend .column;
     font-size:40px;
     font-weight:bold;
+    text-decoration:none;
+    color:$dark;
+    position:relative;
+    top:18px;
 }
 
 .title-nav {
     @extend .column;
     align-self:flex-end; // Align to bottom
     flex-grow:0;
+    position:relative;
+    top:7px;
 }
