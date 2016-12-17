@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-    "github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/contrib/gzip"
     "github.com/wgoodall01/verify/api"
     "github.com/wgoodall01/verify/lib"
     "log"
+    "net/http"
 )
 
 func main() {
@@ -23,9 +23,9 @@ func main() {
     router.POST("/api/sign", api.Route_Sign(privateKey))
 
     // Serve static frontend
-    router.NoRoute(static.ServeRoot("/", "./build"))
-
-    
+    fs := http.FileServer(http.Dir("./client/dist"))
+    wrapper := gin.WrapH(fs)
+    router.NoRoute(wrapper)
 
     router.Run();
 }

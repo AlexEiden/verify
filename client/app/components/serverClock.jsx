@@ -1,29 +1,49 @@
 import React from "react";
+import moment from "moment";
+import "isomorphic-fetch";
 
-import spinnerUrl from "resources/spinner.svg";
+import Spinner from "components/spinner.jsx"
+
 
 export default class extends React.Component{
-    static get timeFormatString(){
-        return "MMMM Do YYYY, h:mm:ss a"
-    } 
+
+    static get contextTypes(){
+        return {
+            blank: React.PropTypes.bool
+        }
+    }
 
     constructor(props){
         super(props);
         this.state = {
             isLoading: true,
-            localTime: null // will hold the local Moment obj
-        }
+            serverTime: null // will hold the local Moment obj
+        };
     }
     
     componentDidMount(){
-        //TODO: Put stuff here later
+        if(!this.context.blank){
+            fetch("/api/time")
+                .then(r => r.json())
+                .then((j) => {
+                    this.setState({
+                        isLoading:false,
+                        serverTime: moment.unix(j.currentTime)
+                    })
+
+                    setInterval(() => {
+                        this.state.serverTime.add(1, "seconds");
+                        this.forceUpdate();
+                    }, 1000);
+                });
+        }
     }
 
     render(){
         return (
             this.state.isLoading ? 
-                <img src={spinnerUrl} style={{"width":"30px", "height":"30px"}}/>
-                : <div>{this.state.localTime.format(this.timeFormatString)}</div>
+                <Spinner/>
+                : <div>{this.state.serverTime.format("MMMM Do YYYY, h:mm:ss a")}</div>
         )
     }
 }
