@@ -11,19 +11,22 @@
     "babel-root-import": "^4.1.5",
     "bulma": "^0.2.3",
     "css-loader": "^0.25.0",
+    "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "history": "~1.17.0",
-    "isomorphic-fetch": "^2.2.1",
+    "imports-loader": "^0.7.0",
     "moment": "^2.17.1",
     "node-sass": "^3.11.2",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
+    "react-dropzone": "^3.7.3",
     "react-helmet": "^3.2.3",
     "react-router": "^2.4.0",
     "sass-loader": "^4.0.2",
     "static-site-generator-webpack-plugin": "^3.1.0",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.3"
+    "webpack": "^1.13.3",
+    "whatwg-fetch": "^2.0.1"
   }
 }

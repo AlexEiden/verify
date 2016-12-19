@@ -12,8 +12,7 @@ module.exports = {
     },
 
     entry: {
-        app: path.resolve("./app/index.jsx"),
-        // style: path.resolve("./app/pages/main.scss")
+        app: path.resolve("./app/index.jsx")
     },
 
     output:{
@@ -23,6 +22,7 @@ module.exports = {
     },
 
     plugins: [
+        new webpack.ProvidePlugin({"fetch": "imports?this=>global!exports?global.fetch!whatwg-fetch"}), // fetch polyfill
         new StaticSitePlugin("app", routeList),
         new ExtractTextPlugin("style.css")
     ],

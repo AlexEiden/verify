@@ -1,7 +1,5 @@
 import React from "react";
 import moment from "moment";
-import "isomorphic-fetch";
-
 import Spinner from "components/spinner.jsx"
 
 
