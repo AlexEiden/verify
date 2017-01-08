@@ -1,6 +1,7 @@
 import React from "react";
 import Dropzone from "react-dropzone";
 import CryptoJS from "crypto-js";
+import "components/fileSubmitter.scss"
 
 export default class extends React.Component{
     onDrop(acceptedFiles){
@@ -34,8 +35,8 @@ export default class extends React.Component{
     render(){
         return (
             <div>
-                <Dropzone onDrop={this.onDrop} multiple={false}>
-                    <div>Name: {this.state.file.name}</div>
+                <Dropzone className="dropzone" onDrop={this.onDrop} multiple={false} style={{}}>
+                   <div>Name: {this.state.file.name}</div>
                 </Dropzone>
             </div>
         )
