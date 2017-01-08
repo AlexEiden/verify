@@ -19,6 +19,8 @@ export class PageFrame extends React.Component {
                     ]}
                 />
                 <div className="container">
+                </div>
+                <div className="container mainPage">
                     <div className="title">
                         <Link className="title-name" to="/">Verify</Link>
                         <div className="title-nav">
@@ -27,12 +29,12 @@ export class PageFrame extends React.Component {
                                 ["/about",    "About"]
                             ].map((e, i) => 
                                 <Link key={i} className="title-nav-link" to={e[0]}>
-									<b>{e[1]}</b>
+                                <b>{e[1]}</b>
                                 </Link>
                             )}
                         </div>
                     </div>
-                    <div className="content">{this.props.children}</div>
+                    {this.props.children}
                 </div>
             </div>
         );

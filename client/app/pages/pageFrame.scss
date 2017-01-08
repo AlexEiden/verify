@@ -3,9 +3,9 @@
 @import "../vars";
 
 body {
-    background-color:$dark;
+    background-color:$background;
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    color: $light;
+    color: $dark;
 }
 
 .container {
@@ -16,15 +16,14 @@ body {
 .title-nav-link{ 
     margin-right:10px;
     text-decoration:underline;
-    color:$light;
+    color:$med;
     font-weight:normal;
 }
 
 .title {
     @extend .columns;
     @extend .is-mobile;
-
-	margin-bottom:3px;
+    border-bottom:3px solid $dark;
 }
 
 .title-name {
@@ -32,7 +31,7 @@ body {
     font-size:40px;
     font-weight:bold;
     text-decoration:none;
-    color:$light;
+    color:$dark;
     position:relative;
     top:18px;
 }
@@ -42,13 +41,5 @@ body {
     align-self:flex-end; // Align to bottom
     flex-grow:0;
     position:relative;
-    top:10px;
-}
-
-.content{
-	background-color:$light;
-	color:$dark;
-	padding:20px;
-	border-radius:1px;
-	box-shadow: 0px 2px 12px 2px black;
+    top:7px;
 }
