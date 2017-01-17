@@ -1,0 +1,23 @@
+@import "../vars";
+
+.button {
+	background-color:$brand;
+	border: 1px solid darken($brand, 20);
+	border-radius: 3px;
+	box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.3);
+	padding: 10px;
+	color:white;
+	margin: 8px;
+	font-size: 18px;
+
+	transition: box-shadow .3s, transform .3s;
+	&:hover{
+		box-shadow: 0 0 12px 0px rgba(0, 0, 0, 0.6);
+		transform: scale(1.07, 1.07);
+	}
+
+	&:active{
+		box-shadow: none;
+		transform: scale(0.93, 0.93);
+	}
+}

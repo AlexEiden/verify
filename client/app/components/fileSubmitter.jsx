@@ -3,6 +3,7 @@ import Dropzone from "react-dropzone";
 import CryptoJS from "crypto-js";
 import ServerClock from "components/serverClock.jsx";
 import "components/fileSubmitter.scss";
+import Button from "components/button.jsx";
 import dropImg from "resources/drop.svg";
 
 var AttributePair = (props) => (
@@ -54,6 +55,7 @@ export default class extends React.Component{
 						<div className="dropzone-filename">{this.state.file.name}</div>
 						<AttributePair attr="Last changed on" value={this.state.file.lastModifiedDate.toString()}/>
 						<AttributePair attr="Signature time" value={<ServerClock/>}/>
+						<div className="ap"><Button text="Click Me!" onClick={()=>alert("ayy lmao")}/></div>
 					</div>)
 				:
 					<img src={dropImg} width="100px" height="100px"/>	
