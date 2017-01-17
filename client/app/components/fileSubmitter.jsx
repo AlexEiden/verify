@@ -7,27 +7,26 @@ export default class extends React.Component{
     onDrop(acceptedFiles){
         var file = acceptedFiles[0];
         
-        this.setState({
+		this.setState({
             "file":file
         });
 
         var reader = new FileReader();
-
+		
+		var self = this; 
         reader.addEventListener(
             'load',
-             ()=> {
-                console.log("Hash:");
-                console.dir(file);
+             function(){
                 var wordArray = CryptoJS.lib.WordArray.create(this.result);
                 var hash = CryptoJS.SHA256(wordArray);
                 var hashHex = hash.toString(CryptoJS.enc.Hex);
-                console.log(hashHex);
-				this.setState({hash:hashHex});
-				this.forceUpdate();
+				self.setState({hash:hashHex});
+                console.log(`Hash of ${file.name} is ${hashHex}`);
 			}
         );
         reader.readAsArrayBuffer(file);
     }
+
 
     constructor(props){
         super(props);
@@ -40,7 +39,7 @@ export default class extends React.Component{
     render(){
         return (
             <div>
-                <Dropzone className="dropzone" onDrop={this.onDrop} multiple={false}>
+                <Dropzone className="dropzone" onDrop={(f) => this.onDrop(f)} multiple={false}>
                     <div>Name: {this.state.file.name}</div>
 					<div>Hash: {this.state.hash}</div>
                 </Dropzone>
