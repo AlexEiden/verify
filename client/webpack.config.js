@@ -1,7 +1,8 @@
 var webpack = require("webpack");
 var path = require("path");
 var StaticSitePlugin = require('static-site-generator-webpack-plugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin")
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var LiveReloadPlugin = require("webpack-livereload-plugin");
 var routeList = require("./app/routeList");
 
 module.exports = {
@@ -22,9 +23,15 @@ module.exports = {
     },
 
     plugins: [
+		new webpack.DefinePlugin({
+			"process.env": {
+				NODE_ENV: JSON.stringify("production")
+			}
+		}),
         new webpack.ProvidePlugin({"fetch": "imports?this=>global!exports?global.fetch!whatwg-fetch"}), // fetch polyfill
         new StaticSitePlugin("app", routeList),
-        new ExtractTextPlugin("style.css")
+        new ExtractTextPlugin("style.css"),
+		new LiveReloadPlugin({port:35729, hostname:"localhost"})
     ],
 
     resolve: {
