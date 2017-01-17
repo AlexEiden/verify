@@ -23,12 +23,8 @@ module.exports = {
     },
 
     plugins: [
-		new webpack.DefinePlugin({
-			"process.env": {
-				NODE_ENV: JSON.stringify("production")
-			}
-		}),
-        new webpack.ProvidePlugin({"fetch": "imports?this=>global!exports?global.fetch!whatwg-fetch"}), // fetch polyfill
+        new webpack.EnvironmentPlugin(["NODE_ENV"]),
+		new webpack.ProvidePlugin({"fetch": "imports?this=>global!exports?global.fetch!whatwg-fetch"}), // fetch polyfill
         new StaticSitePlugin("app", routeList),
         new ExtractTextPlugin("style.css"),
 		new LiveReloadPlugin({port:35729, hostname:"localhost"})
