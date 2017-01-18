@@ -59,7 +59,7 @@ export default class extends React.Component{
 			<div className={"fs-flip-container" + (isFlipped?" flipped":"")}>
 				<div className="fs-file-card">
 					<div className="fs-flip-back">
-						<a onClick={()=>this.onCancel()} className="fs-cancel">{String.fromCharCode(10060)}</a>
+						<a onClick={()=>this.onCancel()} className="fs-cancel">{String.fromCharCode(10006)}</a>
 		 				<div className="fs-filename">{file && file.name}</div>
 		 				<AttributePair attr="Last changed on" value={file && file.lastModifiedDate.toString()}/>
 		 				<AttributePair attr="Signature time" value={<ServerClock/>}/>
