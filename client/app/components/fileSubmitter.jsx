@@ -17,9 +17,7 @@ export default class extends React.Component{
     onDrop(acceptedFiles){
         var file = acceptedFiles[0];
         
-		this.setState({
-            "file":file
-        });
+		this.setState({ file });
 
         var reader = new FileReader();
 		
@@ -30,7 +28,7 @@ export default class extends React.Component{
                 var wordArray = CryptoJS.lib.WordArray.create(this.result);
                 var hash = CryptoJS.SHA256(wordArray);
                 var hashHex = hash.toString(CryptoJS.enc.Hex);
-				self.setState({hash:hashHex});
+				self.setState({hash:hashHex, isFlipped: true});
 				console.dir(file);
                 console.log(`Hash of ${file.name} is ${hashHex}`);
 			}
@@ -39,7 +37,10 @@ export default class extends React.Component{
     }
 
 	onCancel(){
-		this.setState({file:undefined, hash:undefined});
+		this.setState({isFlipped:false});
+
+		// 350ms = .6s/2 + a bit 
+		setTimeout(()=>this.setState({file:undefined, hash:undefined}), 350); 
 	}
 
 
@@ -48,25 +49,26 @@ export default class extends React.Component{
         this.state = {
 			file: undefined,
 			hash: undefined,
+			isFlipped: false // seperate because the data is cleared after the flip completes.
 		};
     }
 
     render(){
-		var hasFile = typeof this.state.file !== "undefined";
+		var { isFlipped, file, hash } = this.state;
 		return (
-			<div className={"fs-flip-container" + (hasFile?" flipped":"")}>
+			<div className={"fs-flip-container" + (isFlipped?" flipped":"")}>
 				<div className="fs-file-card">
+					<div className="fs-flip-back">
+						<a onClick={()=>this.onCancel()} className="fs-cancel">{String.fromCharCode(10060)}</a>
+		 				<div className="fs-filename">{file && file.name}</div>
+		 				<AttributePair attr="Last changed on" value={file && file.lastModifiedDate.toString()}/>
+		 				<AttributePair attr="Signature time" value={<ServerClock/>}/>
+		 				<div className="ap"><Button text="Click Me!" onClick={()=>alert("ayy lmao")}/></div>
+					</div>
 					<div className="fs-flip-front">
 						<Dropzone className="fs-dropzone" onDrop={(f)=>this.onDrop(f)} multiple={false}>
 							<img src={dropImg} width="100px" height="100px"/>
 						</Dropzone>
-					</div>
-					<div className="fs-flip-back">
-						<a onClick={()=>this.onCancel()} className="fs-cancel">{String.fromCharCode(10060)}</a>
-		 				<div className="fs-filename">{hasFile && this.state.file.name}</div>
-		 				<AttributePair attr="Last changed on" value={hasFile && this.state.file.lastModifiedDate.toString()}/>
-		 				<AttributePair attr="Signature time" value={<ServerClock/>}/>
-		 				<div className="ap"><Button text="Click Me!" onClick={()=>alert("ayy lmao")}/></div>
 					</div>
 				</div>
 			</div>
