@@ -38,6 +38,10 @@ export default class extends React.Component{
         reader.readAsArrayBuffer(file);
     }
 
+	onCancel(){
+		this.setState({file:undefined, hash:undefined});
+	}
+
 
     constructor(props){
         super(props);
@@ -48,20 +52,25 @@ export default class extends React.Component{
     }
 
     render(){
-        return (
-            <div>
-                <Dropzone className="dropzone" onDrop={(f) => this.onDrop(f)} multiple={false}>
-				{ this.state.file ? (<div>
-						<div className="dropzone-filename">{this.state.file.name}</div>
-						<AttributePair attr="Last changed on" value={this.state.file.lastModifiedDate.toString()}/>
-						<AttributePair attr="Signature time" value={<ServerClock/>}/>
-						<div className="ap"><Button text="Click Me!" onClick={()=>alert("ayy lmao")}/></div>
-					</div>)
-				:
-					<img src={dropImg} width="100px" height="100px"/>	
-				}
-				</Dropzone>
-            </div>
-        )
+		var hasFile = typeof this.state.file !== "undefined";
+		return (
+			<div className={"fs-flip-container" + (hasFile?" flipped":"")}>
+				<div className="fs-file-card">
+					<div className="fs-flip-front">
+						<Dropzone className="fs-dropzone" onDrop={(f)=>this.onDrop(f)} multiple={false}>
+							<img src={dropImg} width="100px" height="100px"/>
+						</Dropzone>
+					</div>
+					<div className="fs-flip-back">
+						<a onClick={()=>this.onCancel()} className="fs-cancel">{String.fromCharCode(10060)}</a>
+		 				<div className="fs-filename">{hasFile && this.state.file.name}</div>
+		 				<AttributePair attr="Last changed on" value={hasFile && this.state.file.lastModifiedDate.toString()}/>
+		 				<AttributePair attr="Signature time" value={<ServerClock/>}/>
+		 				<div className="ap"><Button text="Click Me!" onClick={()=>alert("ayy lmao")}/></div>
+					</div>
+				</div>
+			</div>
+		)
+
     }
 }
