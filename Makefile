@@ -4,22 +4,17 @@ clean:
 
 deps:
 	go get ./...
+	npm install -g webpack webpack-dev-server
 	cd client && yarn install
 
-dev.serve:
-	go run server.go
+dev.serve-backend:
+	PORT=8081 GIN_MODE=development go run server.go
 
-dev.build:
-	cd client && NODE_ENV=development webpack -d --progress
-
-dev.build-prod:
-	cd client && NODE_ENV=production webpack -p --progress
-
-dev.watch:
-	cd client && NODE_ENV=development webpack --watch --progress
+dev.serve-client:
+	cd client && NODE_ENV="dev" webpack-dev-server --progress --inline
 
 dev.start:
-	make dev.serve & make dev.watch
+	make dev.serve-backend & make dev.serve-client
 
 build:
 	mkdir -p client/dist dist dist/client/dist dist/keys
@@ -31,4 +26,4 @@ build:
 	cp -r keys dist
 
 run: 
-	cd dist && ./server
+	cd dist && PORT=8080 GIN_MODE=release ./server

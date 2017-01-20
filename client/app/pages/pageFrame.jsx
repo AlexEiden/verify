@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 
 import "pages/pageFrame.scss";
 
+var DEV = process.env.NODE_ENV != "production";
+
 export class PageFrame extends React.Component {
     render() {
         return (
@@ -11,7 +13,7 @@ export class PageFrame extends React.Component {
                 <Helmet
                     titleTemplate="%s - Verify"
                     defaultTitle="Verify"
-                    link={[
+                    link={DEV?[]:[ // if it's dev, styles are in js.
                         {"rel":"stylesheet", "href": "/style.css"}
                     ]}
                     meta={[
