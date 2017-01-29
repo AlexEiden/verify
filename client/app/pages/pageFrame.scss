@@ -1,5 +1,3 @@
-@import "~bulma/sass/utilities/mixins";
-@import "~bulma/sass/grid/columns";
 @import "../vars";
 
 body {
@@ -21,25 +19,22 @@ body {
 }
 
 .title {
-    @extend .columns;
-    @extend .is-mobile;
     border-bottom:3px solid $dark;
+	display:flex;
+	justify-content: space-between;
 }
 
 .title-name {
-    @extend .column;
     font-size:40px;
     font-weight:bold;
     text-decoration:none;
     color:$dark;
-    position:relative;
-    top:18px;
+
+	// budge it down a bit
+	position:relative;
+	top:8px;
 }
 
 .title-nav {
-    @extend .column;
-    align-self:flex-end; // Align to bottom
-    flex-grow:0;
-    position:relative;
-    top:7px;
+	align-self: flex-end;
 }
