@@ -1,6 +1,5 @@
 import React from "react";
 import Dropzone from "react-dropzone";
-import CryptoJS from "crypto-js";
 import ServerClock from "components/serverClock.jsx";
 import "components/fileSubmitter.scss";
 import Button from "components/button.jsx";
@@ -14,6 +13,12 @@ var AttributePair = (props) => (
 	</div>
 )
 
+
+function buf2hex(buffer) { // buffer is an ArrayBuffer
+	return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+}
+
+
 export default class extends React.Component{
     onDrop(acceptedFiles){
         var file = acceptedFiles[0];
@@ -21,18 +26,33 @@ export default class extends React.Component{
 		this.setState({ file, isWorking:true });
 
         var reader = new FileReader();
+
+		// Start timer
+		var start = new Date().getTime()
 		
 		var self = this; 
         reader.addEventListener(
             'load',
              function(){
-                var wordArray = CryptoJS.lib.WordArray.create(this.result);
-                var hash = CryptoJS.SHA256(wordArray);
-                var hashHex = hash.toString(CryptoJS.enc.Hex);
-				self.setState({hash:hashHex, isFlipped: true});
-				self.flipTimeout(()=>self.setState({isWorking:false}));
-				console.dir(file);
-                console.log(`Hash of ${file.name} is ${hashHex}`);
+				// from https://github.com/diafygi/webcrypto-examples#sha-256---digest
+				window.crypto.subtle.digest(
+					{
+						name: "SHA-256",
+					},
+					this.result 
+				)
+				.then(function(hash){
+					//returns the hash as an ArrayBuffer
+					var hashHex = buf2hex(hash);
+					self.setState({hash:hashHex, isFlipped: true});
+					self.flipTimeout(()=>self.setState({isWorking:false}));
+					
+					var end = new Date().getTime()	
+					console.log(`Hash of ${file.name} is ${hashHex}\nComputed in ${(end-start)/1000}s.`);
+				})
+				.catch(function(err){
+					console.error(err);
+				});
 			}
         );
         reader.readAsArrayBuffer(file);

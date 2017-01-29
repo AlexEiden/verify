@@ -4,7 +4,6 @@ clean:
 
 deps:
 	go get ./...
-	npm install -g webpack webpack-dev-server
 	cd client && yarn install
 
 dev.serve-backend:
