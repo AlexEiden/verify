@@ -5,6 +5,7 @@ import ServerClock from "components/serverClock.jsx";
 import "components/fileSubmitter.scss";
 import Button from "components/button.jsx";
 import dropImg from "resources/drop.svg";
+import Spinner from "components/spinner.jsx";
 
 var AttributePair = (props) => (
 	<div className="ap">
@@ -17,7 +18,7 @@ export default class extends React.Component{
     onDrop(acceptedFiles){
         var file = acceptedFiles[0];
         
-		this.setState({ file });
+		this.setState({ file, isWorking:true });
 
         var reader = new FileReader();
 		
@@ -29,6 +30,7 @@ export default class extends React.Component{
                 var hash = CryptoJS.SHA256(wordArray);
                 var hashHex = hash.toString(CryptoJS.enc.Hex);
 				self.setState({hash:hashHex, isFlipped: true});
+				self.flipTimeout(()=>self.setState({isWorking:false}));
 				console.dir(file);
                 console.log(`Hash of ${file.name} is ${hashHex}`);
 			}
@@ -39,22 +41,26 @@ export default class extends React.Component{
 	onCancel(){
 		this.setState({isFlipped:false});
 
-		// 350ms = .6s/2 + a bit 
-		setTimeout(()=>this.setState({file:undefined, hash:undefined}), 350); 
+		this.flipTimeout(()=>this.setState({file:undefined, hash:undefined}));
 	}
 
+	flipTimeout(func){
+		// 350ms = .6s/2 + a bit 
+		setTimeout(func, 350); // magic number for the right time
+	}
 
     constructor(props){
         super(props);
         this.state = {
 			file: undefined,
 			hash: undefined,
-			isFlipped: false // seperate because the data is cleared after the flip completes.
+			isFlipped: false, // seperate because the data is cleared after the flip completes.
+			isWorking: false, // is working on a hash
 		};
     }
 
     render(){
-		var { isFlipped, file, hash } = this.state;
+		var { isWorking, isFlipped, file, hash } = this.state;
 		return (
 			<div className={"fs-flip-container" + (isFlipped?" flipped":"")}>
 				<div className="fs-file-card">
@@ -67,7 +73,7 @@ export default class extends React.Component{
 					</div>
 					<div className="fs-flip-front">
 						<Dropzone className="fs-dropzone" onDrop={(f)=>this.onDrop(f)} multiple={false}>
-							<img src={dropImg} width="100px" height="100px"/>
+							{isWorking? <Spinner size={100}/> :<img src={dropImg} width="100px" height="100px"/>}
 						</Dropzone>
 					</div>
 				</div>
