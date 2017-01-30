@@ -12,10 +12,6 @@ dev.serve-backend:
 dev.serve-client:
 	cd client && NODE_ENV="dev" webpack-dev-server --progress --inline
 
-dev.start:
-	make deps
-	make dev.serve-backend & make dev.serve-client
-
 build:
 	make deps
 	mkdir -p client/dist dist dist/client/dist dist/keys
