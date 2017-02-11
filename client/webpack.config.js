@@ -34,7 +34,8 @@ module.exports = {
 		new webpack.ProvidePlugin({"fetch": "imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch"}), // fetch polyfill
 
 		...(DEV?[
-			new webpack.HotModuleReplacementPlugin()	
+			new webpack.HotModuleReplacementPlugin(),
+			new webpack.NamedModulesPlugin()
 		]:[
 			new StaticSitePlugin("app", routeList),
 			new ExtractTextPlugin("style.css"),
@@ -72,14 +73,19 @@ module.exports = {
 			{
 				test:/\.s?css$/,
 				use:DEV?
-					["style-loader", "css-loader", {loader:"sass-loader", options:{sourceMap:true}}]:
+					[
+						{loader:"style-loader", options:{sourceMap:true}},
+						{loader:"css-loader", options:{sourceMap:true, importLoaders:1}},
+						{loader:"sass-loader", options:{sourceMap:true}}
+					] :
 					ExtractTextPlugin.extract({ use:["css-loader", {loader:"sass-loader", options:{sourceMap:true}}]})
 			},
 			{
 				test:/\.jsx?$/,
+				exclude:/node_modules/,
 				use:[
-					//"react-hot-loader",
-					{loader:"babel-loader", options:{presets:[["es2015", {modules:false}], "react"]}}
+					"react-hot-loader",
+					{loader:"babel-loader", options:{presets:[["es2015", /*{modules:false}*/], "react"]}}
 				],
 			},
 			{

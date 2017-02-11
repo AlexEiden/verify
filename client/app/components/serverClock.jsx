@@ -1,7 +1,7 @@
 import React from "react";
-import moment from "moment";
+import fecha from "fecha";
 import Spinner from "components/spinner.jsx"
-
+import DateDisplay from "components/dateDisplay.jsx"
 
 export default class extends React.Component{
 
@@ -15,7 +15,7 @@ export default class extends React.Component{
         super(props);
         this.state = {
             isLoading: true,
-            serverTime: null // will hold the local Moment obj
+            serverTime: null 
         };
     }
     
@@ -26,22 +26,28 @@ export default class extends React.Component{
                 .then((j) => {
                     this.setState({
                         isLoading:false,
-                        serverTime: moment.unix(j.currentTime)
+                        serverTime: new Date(j.currentTime * 1000)
                     })
 
-                    setInterval(() => {
-                        this.state.serverTime.add(1, "seconds");
-                        this.forceUpdate();
+                    this.interval = setInterval(() => {
+						this.setState({
+							serverTime: new Date(this.state.serverTime.getTime() + 1000)
+						})
                     }, 1000);
                 });
         }
     }
 
+	componentWillUnmount(){
+		clearInterval(this.interval);
+	}
+
     render(){
+		var { serverTime, isLoading } = this.state;
         return (
-            this.state.isLoading ? 
+            isLoading ? 
                 <Spinner/>
-                : <div>{this.state.serverTime.format("MMMM Do YYYY, h:mm:ss a")}</div>
+                : <DateDisplay date={this.state.serverTime}/> 
         )
     }
 }

@@ -2,6 +2,7 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import ServerClock from "components/serverClock.jsx";
 import "components/fileSubmitter.scss";
+import DateDisplay from "components/dateDisplay.jsx"
 import Button from "components/button.jsx";
 import dropImg from "resources/drop.svg";
 import Spinner from "components/spinner.jsx";
@@ -87,13 +88,13 @@ export default class extends React.Component{
 					<div className="fs-flip-back">
 						<a onClick={()=>this.onCancel()} className="fs-cancel">{String.fromCharCode(10006)}</a>
 		 				<div className="fs-filename">{file && file.name}</div>
-		 				<AttributePair attr="Last changed on" value={file && file.lastModifiedDate.toString()}/>
+		 				<AttributePair attr="Last changed on" value={file && <DateDisplay date={file.lastModifiedDate}/>}/>
 		 				<AttributePair attr="Signature time" value={<ServerClock/>}/>
 		 				<div className="ap"><Button text="Click Me!" onClick={()=>alert("ayy lmao")}/></div>
 					</div>
 					<div className="fs-flip-front">
 						<Dropzone className="fs-dropzone" onDrop={(f)=>this.onDrop(f)} multiple={false}>
-							{isWorking? <Spinner size={100}/> :<img src={dropImg} width="100px" height="100px"/>}
+							{isWorking? <Spinner size={100}/> :<img src={dropImg} width={100} height={100}/>}
 						</Dropzone>
 					</div>
 				</div>
