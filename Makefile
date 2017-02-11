@@ -10,7 +10,7 @@ dev.serve-backend:
 	PORT=8081 GIN_MODE=debug go run server.go
 
 dev.serve-client:
-	cd client && NODE_ENV="dev" webpack-dev-server --progress --inline
+	cd client && NODE_ENV="development" webpack-dev-server --progress --inline
 
 build:
 	make deps
