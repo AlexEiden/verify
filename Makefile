@@ -16,7 +16,7 @@ build:
 	make deps
 	mkdir -p client/dist dist dist/client/dist dist/keys
 	
-	cd client && NODE_ENV=production webpack -p	
+	cd client && NODE_ENV=production webpack -p --progress
 	go build -o dist/server server.go
 	
 	cp -r client/dist dist/client

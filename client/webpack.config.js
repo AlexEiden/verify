@@ -5,7 +5,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var routeList = require("./app/routeList");
 
 var DEV = process.env.NODE_ENV != "production";
-console.log(" --- DEV: " + DEV);
+process.env.NODE_ENV = DEV ? "development" : "production";
 
 module.exports = {
     devtool: "source-map",
@@ -25,52 +25,91 @@ module.exports = {
 
     output:{
         path: path.resolve('./dist'),
-		publicPath: "http://localhost:8080/",
         filename:'[name].js',
         libraryTarget: "umd"
     },
 
     plugins: [
         new webpack.EnvironmentPlugin(["NODE_ENV"]),
-		new webpack.ProvidePlugin({"fetch": "imports?this=>global!exports?global.fetch!whatwg-fetch"}), // fetch polyfill
+		new webpack.ProvidePlugin({"fetch": "imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch"}), // fetch polyfill
 
 		...(DEV?[
 			new webpack.HotModuleReplacementPlugin()	
 		]:[
 			new StaticSitePlugin("app", routeList),
 			new ExtractTextPlugin("style.css"),
-			new webpack.optimize.UglifyJsPlugin({compress:{warnings:false}})
+			new webpack.LoaderOptionsPlugin({
+				minimize: true,
+				debug: false
+			}),
+		  	new webpack.optimize.UglifyJsPlugin({
+				compress: {
+					warnings: false,
+					screw_ie8: true,
+				  	conditionals: true,
+				  	unused: true,
+				  	comparisons: true,
+				  	sequences: true,
+				  	dead_code: true,
+				  	evaluate: true,
+				  	if_return: true,
+				  	join_vars: true,
+				},
+				output: {
+				  comments: false,
+				},
+				sourceMap: true
+		  	})
 		])
     ],
 
     resolve: {
-		root: path.resolve("./app"),
+		modules: [path.resolve("./app"), "node_modules"]
 	},
 
 	module: {
-		loaders: [
-            {
-                test: /\.scss$/,
-                loader: DEV?
-					"style-loader!css-loader!sass-loader?sourceMap=true"
-					: ExtractTextPlugin.extract('style-loader', 'css!sass?sourceMap=true')
-            },
-            {
-                test: /\.jsx?$/,
-                loader: 'react-hot-loader!babel-loader?{presets:["es2015", "react"]}',
-                exclude: /node_modules/,
-                //query: {
-                //    "presets": ["es2015", "react"]
-                //}
-            },
-            {
-                test: /\.svg$/,
-                loader: "file-loader"
-            },
-        ]
+		rules:[
+			{
+				test:/\.s?css$/,
+				use:DEV?
+					["style-loader", "css-loader", {loader:"sass-loader", options:{sourceMap:true}}]:
+					ExtractTextPlugin.extract({ use:["css-loader", {loader:"sass-loader", options:{sourceMap:true}}]})
+			},
+			{
+				test:/\.jsx?$/,
+				use:[
+					//"react-hot-loader",
+					{loader:"babel-loader", options:{presets:[["es2015", {modules:false}], "react"]}}
+				],
+			},
+			{
+				test:/\.svg$/,
+				use: "file-loader"
+			}
+		]
+		// loaders: [
+        //     {
+        //         test: /\.scss$/,
+        //         loader: DEV?
+		// 			"style-loader!css-loader!sass-loader?sourceMap=true"
+		// 			: ExtractTextPlugin.extract('style-loader', 'css!sass?sourceMap=true')
+        //     },
+        //     {
+        //         test: /\.jsx?$/,
+        //         loader: 'react-hot-loader!babel-loader?{presets:["es2015", "react"]}',
+        //         exclude: /node_modules/,
+        //         //query: {
+        //         //    "presets": ["es2015", "react"]
+        //         //}
+        //     },
+        //     {
+        //         test: /\.svg$/,
+        //         loader: "file-loader"
+        //     },
+        // ]
     },
     
-    sassLoader: {
-        includePaths: [path.resolve("./app/scss")]
-    }
+    // sassLoader: {
+    //     includePaths: [path.resolve("./app/scss")]
+    // }
 }
