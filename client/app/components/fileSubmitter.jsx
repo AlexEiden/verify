@@ -19,8 +19,15 @@ function buf2hex(buffer) { // buffer is an ArrayBuffer
 	return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
 }
 
+var	emptyState = {
+	hash: undefined,
+	isFlipped: false, // seperate because the data is cleared after the flip completes.
+	isWorking: false, // is working on a hash
+	isSubmitting: false, // Is submitting hash to server
+}
 
 export default class extends React.Component{
+
     onDrop(acceptedFiles){
         var file = acceptedFiles[0];
         
@@ -62,7 +69,39 @@ export default class extends React.Component{
 	onCancel(){
 		this.setState({isFlipped:false});
 
-		this.flipTimeout(()=>this.setState({file:undefined, hash:undefined}));
+		this.flipTimeout(()=>this.setState(emptyState));
+	}
+
+	onSubmit(){
+		this.setState({isSubmitting:true});
+		fetch("/api/sign", {
+			method:"POST",
+			body: JSON.stringify({documentHash:this.state.hash}),
+			headers:{
+				"Accept":"application/json",
+				"Content-type":"application/json",
+			}
+
+		})
+		.then(res => res.json())
+		.then((sig) => {
+			this.setState({isSubmitting:false, hasResult: true});
+			console.dir(sig);
+			var sigBlob = new Blob([JSON.stringify(sig)], {type:"application/json"});
+			console.log(sigBlob);
+			var objURL =  window.URL.createObjectURL(sigBlob);
+			
+			// Download obj
+			var dlLink = document.createElement('a');
+			dlLink.href=objURL;
+			dlLink.download=`${this.state.file.name}.verify`;
+			dlLink.click();
+			
+			// Reset component
+			this.onCancel();
+		}).catch((err) => {
+			alert(err);	
+		});
 	}
 
 	flipTimeout(func){
@@ -72,16 +111,11 @@ export default class extends React.Component{
 
     constructor(props){
         super(props);
-        this.state = {
-			file: undefined,
-			hash: undefined,
-			isFlipped: false, // seperate because the data is cleared after the flip completes.
-			isWorking: false, // is working on a hash
-		};
+		this.state = emptyState;
     }
 
     render(){
-		var { isWorking, isFlipped, file, hash } = this.state;
+		var { isWorking, isSubmitting, isFlipped, file, hash, objURL } = this.state;
 		return (
 			<div className={"fs-flip-container" + (isFlipped?" flipped":"")}>
 				<div className="fs-file-card">
@@ -90,7 +124,7 @@ export default class extends React.Component{
 		 				<div className="fs-filename">{file && file.name}</div>
 		 				<AttributePair attr="Last changed on" value={file && <DateDisplay date={file.lastModifiedDate}/>}/>
 		 				<AttributePair attr="Signature time" value={<ServerClock/>}/>
-		 				<div className="ap"><Button text="Click Me!" onClick={()=>alert("ayy lmao")}/></div>
+		 				<div className="ap"><Button text={isSubmitting? <Spinner/> :"Click Me!"} onClick={()=>this.onSubmit()}/></div>
 					</div>
 					<div className="fs-flip-front">
 						<Dropzone className="fs-dropzone" onDrop={(f)=>this.onDrop(f)} multiple={false}>

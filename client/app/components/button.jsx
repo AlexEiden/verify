@@ -2,10 +2,7 @@ import React from "react";
 import "components/button.scss";
 
 export default (props) => (
-	<input
-		type="button"
-		onClick={props.onClick}
-		value={props.text}
-		className="button"
-	/>
+	<button onClick={props.onClick} className="button">
+		{props.text}
+	</button>
 );
